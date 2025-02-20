@@ -1,0 +1,526 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="row g-0">
+            <div class="col-md-3">
+                <div class="profile-sidebar">
+                    <div class="profile-img-container">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="{{ user.nom }}" width="150px">
+                        {% else %}
+                            Pas d'image
+                        {% endif %}                    
+                    </div>
+                    <h3 class="user-name">{{ user.last_name }} {{user.first_name}}</h3>
+                    <div class="user-since">
+                        <i class="fas fa-user-clock"></i> Membre depuis {{ user.datecreation|date:"j F Y" }}
+                    </div>
+                    <div class="profile-actions">
+                        <a href="{% url 'editerProfile' %}" class="btn btn-outline-light">
+                            <i class="fas fa-user-edit"></i> Modifier le profil
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="profile-content">
+                    <h2 class="profile-title">Informations personnelles</h2>
+                    
+                    <div class="info-section">
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="info-details">
+                                <span class="info-label">Nom</span>
+                                <span class="info-value">{{ user.last_name }}</span>
+                            </div>
+                            <div class="info-details">
+                                <span class="info-label">Prenom</span>
+                                <span class="info-value">{{ user.first_name }}</span>
+                            </div>
+                            <div class="info-details">
+                                <span class="info-label">Nom d'utilisateur</span>
+                                <span class="info-value">{{ user.username }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="info-details">
+                                <span class="info-label">Adresse email</span>
+                                <span class="info-value">{{ user.email }}</span>
+                            </div>
+                            <div class="info-details">
+                                <span class="info-label">Role</span>
+                                <span class="info-value">{{ user.role }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="profile-title mt-5">Sécurité du compte</h2>
+                    <div class="info-section">
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="info-details">
+                                <span class="info-label">Mot de passe</span>
+                                <span class="info-value">********</span>
+                                <a href="{% url 'changerpwd' %}" class="info-action">Changer</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                
+                    
+                    <div class="profile-footer">
+                        <a href="{% url 'deconnexion' %}" class="btn btn-danger">
+                            <i class="fas fa-sign-out-alt"></i> Déconnexion
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .page-content {
+        min-height: 100vh;
+        background: linear-gradient(to bottom right, #f8f9fa, #eeeeee);
+    }
+    
+    .row {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+    
+    /* Sidebar améliorée */
+    .profile-sidebar {
+        background: linear-gradient(135deg, #2b2a2a 0%, #1a1919 100%);
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23333333' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
+        color: white;
+        text-align: center;
+        padding: 3rem 1.5rem;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: fixed;
+        width: inherit;
+        max-width: inherit;
+    }
+    
+    .profile-img-container {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 1.5rem;
+        border: 4px solid #ff7f50;
+        box-shadow: 0 8px 20px rgba(255, 127, 80, 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .profile-img-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(255, 127, 80, 0.5);
+    }
+    
+    .user-name {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #ff7f50;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .user-since {
+        opacity: 0.8;
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+        color: #fff;
+    }
+    
+    .btn-outline-light {
+        border: 2px solid #ff7f50;
+        color: #ff7f50;
+        padding: 0.7rem 1rem;
+        transition: all 0.3s;
+        width: 100%;
+        border-radius: 30px;
+        font-weight: 500;
+    }
+    
+    .btn-outline-light:hover {
+        background-color: #ff7f50;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 127, 80, 0.4);
+    }
+    
+    /* Content amélioré */
+    .profile-content {
+        padding: 3rem;
+        background: #f9f9f9;
+        min-height: 100vh;
+        color: #333;
+    }
+    
+    .profile-title {
+        color: #ff7f50;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 0.8rem;
+    }
+    
+    .profile-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(to right, #ff7f50, #ff9f7d);
+        border-radius: 3px;
+    }
+    
+    /* Cartes d'information améliorées */
+    .info-card {
+        display: flex;
+        align-items: flex-start;
+        padding: 1.5rem;
+        margin-bottom: 1.2rem;
+        border-radius: 12px;
+        background: white;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, #ff7f50, #ff9f7d);
+        border-radius: 4px 0 0 4px;
+    }
+    
+    .info-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    
+    .info-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin-right: 1.2rem;
+        box-shadow: 0 4px 10px rgba(255, 127, 80, 0.3);
+    }
+    
+    .info-details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .info-details:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    
+    .info-label {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 0.3rem;
+        font-weight: 500;
+    }
+    
+    .info-value {
+        font-weight: 600;
+        color: #333;
+        font-size: 1.1rem;
+        transition: color 0.3s;
+    }
+    
+    .info-card:hover .info-value {
+        color: #ff7f50;
+    }
+    
+    .info-action {
+        color: #ff7f50;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin-top: 0.3rem;
+    }
+    
+    .info-action:hover {
+        color: #ff6347;
+        text-decoration: none;
+        transform: translateX(3px);
+    }
+    
+    /* Projets améliorés */
+    .projects-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 2rem;
+    }
+    
+    .btn-create-project {
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 30px;
+        transition: all 0.3s;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(255, 127, 80, 0.3);
+    }
+    
+    .btn-create-project:hover {
+        background: linear-gradient(135deg, #ff6347, #ff8f6d);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(255, 127, 80, 0.4);
+    }
+    
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .project-card {
+        background-color: white;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(to right, #ff7f50, #ff9f7d);
+    }
+    
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+    }
+    
+    .project-title {
+        color: #333;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        padding: 1.5rem 1.5rem 0.5rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .project-description {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+        padding: 0 1.5rem;
+        flex-grow: 1;
+    }
+    
+    .project-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.8rem;
+        padding: 1rem 1.5rem;
+        background: rgba(0,0,0,0.02);
+    }
+    
+    .project-action-btn {
+        color: #888;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+        padding: 0.4rem;
+        border-radius: 50%;
+    }
+    
+    .project-action-btn:hover {
+        color: #ff7f50;
+        background: rgba(255, 127, 80, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .no-projects {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 12px;
+        color: #888;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .no-projects i {
+        font-size: 3.5rem;
+        color: #ff9f7d;
+        margin-bottom: 1.2rem;
+        display: block;
+        opacity: 0.8;
+    }
+    
+    .no-projects p {
+        font-size: 1.1rem;
+        opacity: 0.8;
+    }
+    
+    /* Modal amélioré */
+    .modal-content {
+        border-radius: 12px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
+    .modal-header {
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        color: white;
+        padding: 1.2rem 1.5rem;
+        border-bottom: none;
+    }
+    
+    .modal-title {
+        color: white;
+        font-weight: 600;
+    }
+    
+    .modal-body {
+        padding: 1.8rem 1.5rem;
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        padding: 0.7rem 1rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+        border-color: #ff7f50;
+        box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.2);
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        border: none;
+        border-radius: 30px;
+        padding: 0.7rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #ff6347, #ff8f6d);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(255, 127, 80, 0.3);
+    }
+    
+    .btn-secondary {
+        background: #f0f0f0;
+        color: #666;
+        border: none;
+        border-radius: 30px;
+        padding: 0.7rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .btn-secondary:hover {
+        background: #e6e6e6;
+        color: #555;
+    }
+    
+    .profile-footer {
+        margin-top: 3rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .btn-danger {
+        background: linear-gradient(135deg, #ff7f50, #ff6347);
+        border: none;
+        padding: 0.75rem 1.8rem;
+        font-weight: 500;
+        transition: all 0.3s;
+        border-radius: 30px;
+        box-shadow: 0 4px 10px rgba(255, 127, 80, 0.3);
+    }
+    
+    .btn-danger:hover {
+        background: linear-gradient(135deg, #ff6347, #ff4500);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(255, 127, 80, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+        .profile-sidebar {
+            height: auto;
+            position: relative;
+            padding: 2rem 1rem;
+        }
+        
+        .profile-img-container {
+            width: 120px;
+            height: 120px;
+        }
+        
+        .profile-content {
+            padding: 2rem 1.5rem;
+        }
+        
+        .user-name {
+            font-size: 1.5rem;
+        }
+        
+        .projects-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

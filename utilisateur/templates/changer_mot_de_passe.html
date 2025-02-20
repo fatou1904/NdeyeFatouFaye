@@ -1,0 +1,131 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<style>
+  .password-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
+
+  .password-title {
+    color: #ff7f50;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #ff7f50;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #ff7f50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .submit-btn:hover {
+    background-color: #ff6b3d;
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: #ff7f50;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+
+  .messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+
+  .messages li {
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+  }
+
+  .messages .success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+</style>
+
+<div class="password-container">
+  <h2 class="password-title">Changer votre mot de passe</h2>
+  
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+          {% for error in field.errors %}
+            <span class="error-message">{{ error }}</span>
+          {% endfor %}
+        {% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="submit-btn">Modifier le mot de passe</button>
+  </form>
+
+  <a href="{% url 'profile' %}" class="back-link">Retour au profil</a>
+</div>
+{% endblock %}

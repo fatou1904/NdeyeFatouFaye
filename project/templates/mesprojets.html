@@ -1,0 +1,551 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="projects-header">
+            <h1 class="main-title">Tous les projets</h1>
+            <div class="header-actions">
+                <a href="{% url 'add_projet' %}" class="btn btn-create-project">
+                    <i class="fas fa-plus"></i> Nouveau Projet
+                </a>
+                
+            </div>
+        </div>
+        
+        
+        <div class="projects-grid" id="projectsContainer">
+            {% for projet in project %}
+                <div class="project-card" >
+                    <div class="project-header">
+                        <h3 class="project-title">{{projet.titre}}</h3>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-description">{{projet.description}}</p>
+                        <div class="project-meta">
+                            <div class="meta-item">
+                                <a href="{% url 'mestache' %}"><i class="ri-file-add-line"></i>
+                                    <span>Modifier projet</span></a>
+                            </div>
+                            <div class="meta-item">
+                                <a href="{% url 'delete_projet' idP=projet.id %}"  class="task-action-btn delete-btn">
+                                    <i class="ri-delete-bin-line"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            {% empty %}
+                <div class="no-projects">
+                    <i class="fas fa-folder-open"></i>
+                    <p>Aucun projet n'a été créé pour le moment</p>
+                    <button type="button" class="btn btn-create-first-project" data-bs-toggle="modal" data-bs-target="#newProjectModal">
+                        <a href={% url 'add_projet' %} >
+                            Créer votre premier projet
+                        </a>
+                    </button>
+                    
+                </div>
+            {% endfor %}
+        </div>
+        
+       
+
+
+<style>
+    .page-content {
+        min-height: 100vh;
+        background: linear-gradient(to bottom right, #f8f9fa, #eeeeee);
+        padding: 2rem 0;
+    }
+
+    .container-fluid {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .projects-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .main-title {
+        color: #333;
+        font-weight: 600;
+        font-size: 2rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .main-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(to right, #ff7f50, #ff9f7d);
+        border-radius: 3px;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-container {
+        position: relative;
+        width: 300px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.6rem 1rem 0.6rem 2.5rem;
+        border-radius: 30px;
+        border: 1px solid #ddd;
+        transition: all 0.3s;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #ff7f50;
+        box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.2);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888;
+    }
+
+    .filter-select {
+        padding: 0.6rem 1rem;
+        border-radius: 30px;
+        border: 1px solid #ddd;
+        background-color: white;
+        min-width: 150px;
+        transition: all 0.3s;
+    }
+
+    .filter-select:focus {
+        outline: none;
+        border-color: #ff7f50;
+        box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.2);
+    }
+
+    .btn-create-project {
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 30px;
+        transition: all 0.3s;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(255, 127, 80, 0.3);
+        white-space: nowrap;
+    }
+
+    .btn-create-project:hover {
+        background: linear-gradient(135deg, #ff6347, #ff8f6d);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(255, 127, 80, 0.4);
+    }
+
+    .projects-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin-right: 1.2rem;
+        box-shadow: 0 5px 15px rgba(255, 127, 80, 0.3);
+    }
+
+    .stat-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #777;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.8rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .project-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+    }
+
+    .project-header {
+        padding: 1.5rem 1.5rem 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .project-title {
+        color: #333;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .creator-avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ff7f50;
+    }
+
+    .project-body {
+        padding: 1.2rem 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-description {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+        flex-grow: 1;
+    }
+
+    .project-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        color: #888;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .project-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.8rem;
+        padding: 1rem 1.5rem;
+        background: rgba(0,0,0,0.02);
+        border-top: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .project-action-btn {
+        color: #888;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s;
+        background: transparent;
+        border: none;
+        font-size: 1rem;
+    }
+
+    .view-btn:hover {
+        color: #3498db;
+        background: rgba(52, 152, 219, 0.1);
+    }
+
+    .edit-btn:hover {
+        color: #ff7f50;
+        background: rgba(255, 127, 80, 0.1);
+    }
+
+    .delete-btn:hover {
+        color: #e74c3c;
+        background: rgba(231, 76, 60, 0.1);
+    }
+
+    .no-projects {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 12px;
+        color: #888;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .no-projects i {
+        font-size: 4rem;
+        color: #ff9f7d;
+        margin-bottom: 1.5rem;
+        display: block;
+        opacity: 0.8;
+    }
+
+    .no-projects p {
+        font-size: 1.1rem;
+        opacity: 0.8;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-create-first-project {
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.8rem;
+        border-radius: 30px;
+        transition: all 0.3s;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(255, 127, 80, 0.3);
+    }
+
+    .btn-create-first-project:hover {
+        background: linear-gradient(135deg, #ff6347, #ff8f6d);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(255, 127, 80, 0.4);
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        gap: 0.5rem;
+    }
+
+    .page-item {
+        margin: 0;
+    }
+
+    a{
+        text-decoration: none;
+    }
+
+    .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: #666;
+        text-decoration: none;
+        transition: all 0.3s;
+        background: white;
+        border: 1px solid #ddd;
+    }
+
+    .page-link:hover {
+        background: #f9f9f9;
+        color: #ff7f50;
+        border-color: #ff7f50;
+    }
+
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        color: white;
+        border-color: #ff7f50;
+        box-shadow: 0 4px 10px rgba(255, 127, 80, 0.3);
+    }
+
+    /* Modal styling */
+    .modal-content {
+        border-radius: 12px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        color: white;
+        padding: 1.2rem 1.5rem;
+        border-bottom: none;
+    }
+
+    .modal-title {
+        color: white;
+        font-weight: 600;
+    }
+
+    .modal-body {
+        padding: 1.8rem 1.5rem;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        padding: 0.7rem 1rem;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #ff7f50;
+        box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.2);
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #ff7f50, #ff9f7d);
+        border: none;
+        border-radius: 30px;
+        padding: 0.7rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #ff6347, #ff8f6d);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(255, 127, 80, 0.3);
+    }
+
+    .btn-secondary {
+        background: #f0f0f0;
+        color: #666;
+        border: none;
+        border-radius: 30px;
+        padding: 0.7rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .btn-secondary:hover {
+        background: #e6e6e6;
+        color: #555;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        border: none;
+        border-radius: 30px;
+        padding: 0.7rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .btn-danger:hover {
+        background: linear-gradient(135deg, #c0392b, #a93226);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+    }
+
+    @media (max-width: 992px) {
+        .projects-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .header-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .search-container {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container-fluid {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .header-actions {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .search-container {
+            width: 100%;
+            max-width: none;
+        }
+        
+        .filter-select {
+            width: 100%;
+        }
+        
+        .btn-create-project {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .projects-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+{% endblock %}

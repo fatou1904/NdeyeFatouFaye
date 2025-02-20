@@ -1,0 +1,236 @@
+
+{% load static %}
+{%block content%}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Import Google font - Poppins */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            width: 100%;
+            background: linear-gradient(rgba(33, 37, 41, 0.75), rgba(33, 37, 41, 0.75)), url('/static/images/img.avif');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            width: 420px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .container .form {
+            padding: 30px;
+        }
+
+        h1 {
+            margin: 0 0 25px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        h1:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #ff7f50;
+        }
+
+        .error-messages {
+            margin-bottom: 20px;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        label {
+            padding: 10px 0;
+            color: #444;
+            cursor: pointer;
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #e1e1e1;
+            border-radius: 6px;
+            outline: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            border-color: #ff7f50;
+            box-shadow: 0 0 0 0.2rem rgba(255, 127, 80, 0.25);
+        }
+
+        a {
+            font-size: 16px;
+            color: #ff7f50;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            color: #fff;
+            background: #ff7f50;
+            width: 100%;
+            padding: 12px;
+            font-size: 17px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff6347;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 25px;
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #ff7f50;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            padding-left: 40px;
+            margin-bottom: 0;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <span class="logo">ESMT Portail</span>
+    </div>
+    
+    <div class="container">
+        <div class="form">
+            <h1>Connexion</h1>
+
+            {% if messages %}
+            <div class="error-messages">
+                {% for message in messages %}
+                <p class="error">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'connexion' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" name="username" id="username" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <label for="password">Mot de passe</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+                
+                <button type="submit">Se connecter</button>
+            </form>
+            <p class="link">Pas encore inscrit ? <a href="{% url 'inscription' %}">S'inscrire</a></p>
+        </div>
+    </div>
+    
+    <div class="footer">
+        &copy; {% now "Y" %} ESMT. Tous droits réservés. | <a href="#">Politique de confidentialité</a>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+{% endblock%}
